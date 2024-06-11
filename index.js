@@ -5,9 +5,15 @@ const savedText = document.getElementById("textSaved");
 
 document.addEventListener("DOMContentLoaded", () => {
   const savedValue = () => {
-    const name = localStorage.getItem("name");
-    if (name) {
-      savedText.innerText = name;
+    const nomeSalvato = localStorage.getItem("names");
+    let names;
+    if (nomeSalvato) {
+      names = JSON.parse(nomeSalvato);
+    } else {
+      names = [];
+    }
+    if (names.length > 0) {
+      savedText.innerText = names.join(", ");
     } else {
       savedText.innerText = "vuoto";
     }
@@ -16,9 +22,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   saveButton.addEventListener("click", () => {
     const name = text.value;
-    localStorage.setItem("name", name);
+    const nomeSalvato = localStorage.getItem("names");
+    let names;
+    if (nomeSalvato) {
+      names = JSON.parse(nomeSalvato);
+    } else {
+      names = [];
+    }
+    names.push(name);
+    localStorage.setItem("names", JSON.stringify(names));
+    savedValue();
   });
   removeButton.addEventListener("click", () => {
-    localStorage.removeItem("name");
+    localStorage.removeItem("names");
+    savedValue();
   });
 });
